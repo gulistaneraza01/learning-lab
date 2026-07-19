@@ -2,10 +2,11 @@ import { ListObjectsCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import s3Client from '../config/s3Client.js';
 import { tryCatch } from '../utils/TryCatch.js';
+import { sanitizeKey } from '../utils/sanitizeKey.js';
 
 export const preSignedUrl = tryCatch(async (req, res) => {
   const { fileName, fileType } = req.body;
-  const uniqueKey = `${Date.now()}-${fileName}`;
+  const uniqueKey = `${Date.now()}-${sanitizeKey(fileName)}`;
 
   const putObjectCommand = new PutObjectCommand({
     Bucket: process.env.SUPABASE_S3_BUCKET,
