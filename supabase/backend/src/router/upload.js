@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { preSignedUrl, listFiles } from '../controller/uplaod.js';
+import { preSignedUrl, listFiles } from '../controller/upload.js';
 
 const router = Router();
 
