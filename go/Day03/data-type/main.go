@@ -43,7 +43,7 @@ func datatype() {
 
 	fmt.Println(b)
 
-	const pi = 3.14
+	const pi float64 = 3.14
 	fmt.Println(pi)
 
 }
