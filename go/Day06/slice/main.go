@@ -8,11 +8,38 @@ func main() {
 	fmt.Println("hello raza")
 
 	// example1()
-	example2()
+	// example2()
 	// example3()
 	// example4()
 	// example5()
 	// example6()
+
+	// example7()
+	example8()
+
+}
+
+func example8() {
+	var nums []int
+
+	for i := 0; i <= 257; i++ {
+		nums = append(nums, i)
+		printCapInt(nums)
+	}
+
+	for _, num := range []int{2, 3, 4, 5} {
+		fmt.Println(num)
+	}
+
+}
+
+func example7() {
+	sli1 := []int{1, 2, 3}
+	sli1 = append(sli1, 4, 234, 234)
+	sli2 := append(sli1, 6)
+
+	sli1[0] = 10
+	fmt.Println(sli1, sli2)
 
 }
 
