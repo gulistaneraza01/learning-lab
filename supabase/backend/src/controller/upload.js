@@ -39,3 +39,23 @@ export const listFiles = tryCatch(async (req, res) => {
     data: data.Contents,
   });
 });
+
+export const initiateMultipartUpload = tryCatch(async (req, res) => {
+  const { fileName, fileType } = req.body;
+  const uniqueKey = `${Date.now()}-${sanitizeKey(fileName)}`;
+
+  const initiateMultipartUploadCommand = new InitiateMultipartUploadCommand({
+    Bucket: process.env.SUPABASE_S3_BUCKET,
+    Key: uniqueKey,
+  });
+
+  console.log(
+    initiateMultipartUploadCommand,
+    initiateMultipartUploadCommand.uploadId,
+  );
+  res.json({
+    status: 'success',
+    message: 'Multipart upload initiated successfully',
+    data: initiateMultipartUploadCommand,
+  });
+});
