@@ -93,5 +93,8 @@ func GenderFromString(s string) (Gender, bool) {
 func example4() {
 	boy := Male
 	fmt.Println(Monday, boy, Female)
+	person := map[string]int{}
+	fmt.Println(person["age"]) // 0 — reading from nil map is safe, returns zero value
+	person["age"] = 30
 
 }
