@@ -13,7 +13,25 @@ func main() { // this is main function
 	fmt.Println("hello Raza")
 	// example1()
 	// example2()
-	example4()
+	// example4()
+	example5()
+}
+
+func example5() {
+	var x any = 42
+	fmt.Println(x)
+
+	variadit("raza", "gulistane")
+
+	variadit()
+}
+
+func variadit(who ...string) {
+	if who == nil {
+		fmt.Println("there is no argument pass in this function")
+		return
+	}
+	fmt.Println(who)
 }
 
 func example2() {
