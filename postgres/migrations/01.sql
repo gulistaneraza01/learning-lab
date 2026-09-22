@@ -1,0 +1,33 @@
+-- CREATE IF NOT EXISTS TABLE users (
+--   id sequence PRIMARY KEY,
+--   name VARCHAR(50) NOT NULL,
+--   email VARCHAR(50) NOT NULL UNIQUE,
+--   password TEXT NOT NULL,
+--   created_at TIMESTAMP
+--   WITH
+--     TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+-- )
+CREATE TYPE role AS ENUM ('super_admin', 'admin', 'user')
+CREATE TABLE IF NOT EXISTS users (
+  -- id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
+  name VARCHAR(50) NOT NULL,
+  email VARCHAR(50) NOT NULL UNIQUE,
+  password TEXT NOT NULL,
+  role role NOT NULL DEFAULT 'user',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+);
+
+CREATE TABLE IF EXISTS users_profile (
+  user_id UUID PRIMARY KEY REFERENCES users ON DELETE CASCADE,
+  bio TEXT,
+  phone TEXT,
+  avatar_url TEXT,
+  user_name TEXT NOT NULL UNIQUE,
+  address JSONB,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TYPE status AS ENUM ('pending', 'in_progress', 'done')
