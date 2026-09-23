@@ -10,7 +10,7 @@
 CREATE TYPE role AS ENUM ('super_admin', 'admin', 'user')
 CREATE TABLE IF NOT EXISTS users (
   -- id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name VARCHAR(50) NOT NULL,
   email VARCHAR(50) NOT NULL UNIQUE,
   password TEXT NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 );
 
-CREATE TABLE IF EXISTS users_profile (
+CREATE TABLE IF NOT EXISTS users_profile (
   user_id UUID PRIMARY KEY REFERENCES users ON DELETE CASCADE,
   bio TEXT,
   phone TEXT,
@@ -30,4 +30,37 @@ CREATE TABLE IF EXISTS users_profile (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TYPE status AS ENUM ('pending', 'in_progress', 'done')
+CREATE TYPE status AS ENUM ('active', 'in_active')
+CREATE TABLE IF NOT EXIST projects(
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(100) NOT NULL,
+  description TEXT,
+  status status NOT NULL DEFAULT 'active',
+  owner_id UUID NOT NULL REFERENCES users ON DELETE RESTRICT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TYPE task_status AS ENUM ("done","in_progress","pending")
+CREATE TABLE IF NOT EXIST tasks(
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  project_id UUID NOT NULL REFERENCES projects ON DELETE CASCADE,
+  title VARCHAR(100) NOT NULL,
+  description TEXT,
+  status task_status NOT NULL DEFAULT 'pending',
+  priority SMALLINT NOT NULL DEFAULT 0 CHECK (priority BETWEEN 0 AND 5),
+  user_id UUID REFERENCES user ON DELETE SET NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE IF NOT EXISTS project_member(
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES user ON DELETE CASCADE,
+  project_id UUId REFERENCES project ON DELETE CASCADE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY(user_id, project_id)
+);
