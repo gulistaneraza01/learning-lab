@@ -23,3 +23,16 @@ u.*, to_jsonb(up.*)
 FROM user u
 LEFT JOIN user_profile up ON a.id = b.user_id
 where u.id = :userId;
+
+
+-- Insert data into 'users'
+INSERT INTO TableName (name, email,password,role)
+VALUES ('Raza','raza@gmail.com','jfdhhs','admin')
+RETURNING *;
+
+
+-- Update rows in 'TableName' where condition is met
+UPDATE users
+SET :field = :value
+WHERE id=:id
+RETURNING *;

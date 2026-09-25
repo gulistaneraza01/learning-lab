@@ -9,8 +9,7 @@
 -- )
 CREATE TYPE role AS ENUM ('super_admin', 'admin', 'user')
 CREATE TABLE IF NOT EXISTS users (
-  -- id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
   name VARCHAR(50) NOT NULL,
   email VARCHAR(50) NOT NULL UNIQUE,
   password TEXT NOT NULL,
@@ -18,6 +17,10 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 );
+
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_users_name ON users (email);
+
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_users_created_at ON users (created_at DESC);
 
 CREATE TABLE IF NOT EXISTS users_profile (
   user_id UUID PRIMARY KEY REFERENCES users ON DELETE CASCADE,
@@ -31,8 +34,8 @@ CREATE TABLE IF NOT EXISTS users_profile (
 );
 
 CREATE TYPE status AS ENUM ('active', 'in_active')
-CREATE TABLE IF NOT EXIST projects(
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+CREATE TABLE IF NOT EXIST projects (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
   name VARCHAR(100) NOT NULL,
   description TEXT,
   status status NOT NULL DEFAULT 'active',
@@ -41,9 +44,9 @@ CREATE TABLE IF NOT EXIST projects(
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TYPE task_status AS ENUM ("done","in_progress","pending")
-CREATE TABLE IF NOT EXIST tasks(
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+CREATE TYPE task_status AS ENUM ("done", "in_progress", "pending")
+CREATE TABLE IF NOT EXIST tasks (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
   project_id UUID NOT NULL REFERENCES projects ON DELETE CASCADE,
   title VARCHAR(100) NOT NULL,
   description TEXT,
@@ -54,13 +57,11 @@ CREATE TABLE IF NOT EXIST tasks(
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-
-CREATE TABLE IF NOT EXISTS project_member(
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+CREATE TABLE IF NOT EXISTS project_member (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
   user_id UUID REFERENCES user ON DELETE CASCADE,
   project_id UUId REFERENCES project ON DELETE CASCADE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-  PRIMARY KEY(user_id, project_id)
+  PRIMARY KEY (user_id, project_id)
 );
