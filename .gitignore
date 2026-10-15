@@ -70,3 +70,6 @@ docker-compose.override.yml
 # Test coverage
 coverage/
 .nyc_output/
+
+# Turborepo
+.turbo/
